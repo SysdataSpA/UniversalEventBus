@@ -1,5 +1,5 @@
 # EventDispatcher
-Event dispatcher - An event bus by Sysdata
+EventDispatcher - An event bus by Sysdata
 =============================
 
 The EventDispatcher events is a bus designed to separate different parts of the application, while still allowing them to communicate efficiently.
@@ -9,6 +9,7 @@ The events that are posted by the Event dispatcher are heard by all those who si
 
 Usage
 --------
+
 1. You've got to initialize the EventDispatcher. We suggest to do it in the MainApplication's onCreate().
 
 ```java
@@ -18,17 +19,35 @@ Usage
 2. Register the EventDispatcher when the Activity/Fragment/Service is created and unregister it when it is destroyed.
 
 ```java
+    
+    private String mEventDispatcherTag;
+    
     @Override
     public void onCreate() {
         super.onCreate();
+        // retrieve the saved state, if present
+        if (savedInstanceState != null && savedInstanceState.containsKey("ett")) {
+            this.mEventDispatcherTag = savedInstanceState.getString("ett");
+        }
+        // loadPoint() is used to handle events' saved state between configuration changes 
+        EventDispatcher.loadPoint(this, this.mEventDispatcherTag);
         // register the event dispatcher in order to receive 
         // events that are posted on the Bus.
         EventDispatcher.register(this);
     }
     
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // save the EventDispatcher's tag
+        outState.putString("ett", mEventDispatcherTag);
+    }
+    
+    @Override
     public void onDestroy() {
         super.onDestroy();
+        // save point is used to save the state in order to restore it later, after the configuration change.
+        this.mEventDispatcherTag = EventDispatcher.savePoint(this);
         // unregister the event dispatcher
         EventDispatcher.unregister(this);
     }
