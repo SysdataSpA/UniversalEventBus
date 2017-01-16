@@ -9,7 +9,59 @@ The events that are posted by the Event dispatcher are heard by all those who si
 
 Usage
 --------
+1. You've got to initialize the EventDispatcher. We suggest to do it in the MainApplication's onCreate().
 
+```java
+  EventDispatcher.useEventProcessor(RxEventProcessor.newInstance());
+```
+
+2. Register the EventDispatcher when the Activity/Fragment/Service is created and unregister it when it is destroyed.
+
+```java
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        // register the event dispatcher in order to receive 
+        // events that are posted on the Bus.
+        EventDispatcher.register(this);
+    }
+    
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // unregister the event dispatcher
+        EventDispatcher.unregister(this);
+    }
+```
+3. Create events, post and receive them: Once the EventDispatcher is initialized and register in your Android component, you can post and receive events easily. Use `EventDispatcher.post()` to post the event you want to stream in the bus. Create a public method that has the same event type in its signature and annotate it with the `@RxSubscribe` signature in order to receive the Object that has been posted.
+
+```java
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        // post an example event 
+        EventDispatcher.post(new ExampleEvent());
+    }
+    
+    @RxSubscribe
+    public void onConsumeExampleEvent(ExampleEvent event) {
+        // do what you want with the incoming event
+    }
+    
+    /**
+    * This is an example empty event: remember to add the "Event" annotation!!
+    */
+    @Event(type = Event.Type.UI)
+    public class ExampleEvent {
+    
+        public ExampleEvent() {
+          // empty constructor
+        }
+        
+    }
+```
+
+The posting class can be different from the receiving one: both must be registered to the EventDispatcher, though! Remember that each Class that you want to use as an event MUST have the `@Event` annotation. You can choose between 5 type of events based on which is the use of the designed event: GENERIC, DATA, NETWORK, CONTEXT and UI. The difference is that UI events will be posted on the UI thread, meanwhile the others will be posted in a separated Thread.
 
 Download
 --------
