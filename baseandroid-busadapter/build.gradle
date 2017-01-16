@@ -1,0 +1,76 @@
+buildscript {
+    dependencies {
+        repositories {
+            mavenCentral()
+            // serve per org.jfrog.buildinfo:build-info-extractor-gradle:3.1.1
+            maven { url "https://plugins.gradle.org/m2/" }
+            maven { url 'https://oss.jfrog.org/libs-snapshot' }
+        }
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.3'
+        classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:3.1.1'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.4'
+        classpath 'com.github.dcendents:android-maven-plugin:1.2'
+        classpath 'me.tatarka:gradle-retrolambda:3.2.5'
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'me.tatarka.retrolambda'
+
+def libName = "baseandroid-busadapter"
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+
+    defaultConfig {
+        minSdkVersion 9
+        targetSdkVersion 23
+        versionCode libVersionCode
+        versionName libVersionName
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.3.0'
+}
+
+// pubblicazione maven
+if(project.rootProject.file('local.properties').exists()) {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    ext {
+        // GROUP_ID
+        publishedGroupId = 'com.baseandroid'
+        // ARTIFACT_ID
+        artifact = libName
+        // VERSION_ID
+        libraryVersion = libVersionName
+
+        developerId = properties.getProperty("bintray.developer.id")
+        developerName = properties.getProperty("bintray.developer.name")
+        developerEmail = properties.getProperty("bintray.developer.email")
+
+        bintrayRepo = 'maven'
+        bintrayName = 'baseandroid-busadapter'
+        libraryName = 'baseandroid-busadapter'
+        bintrayOrganization = 'sysdata'
+    }
+
+    apply from: 'publishBintray.gradle'
+}
