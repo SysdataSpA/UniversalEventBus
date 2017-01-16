@@ -20,34 +20,17 @@ Usage
 
 ```java
     
-    private String mEventDispatcherTag;
-    
     @Override
     public void onCreate() {
         super.onCreate();
-        // retrieve the saved state, if present
-        if (savedInstanceState != null && savedInstanceState.containsKey("ett")) {
-            this.mEventDispatcherTag = savedInstanceState.getString("ett");
-        }
-        // loadPoint() is used to handle events' saved state between configuration changes 
-        EventDispatcher.loadPoint(this, this.mEventDispatcherTag);
         // register the event dispatcher in order to receive 
         // events that are posted on the Bus.
         EventDispatcher.register(this);
     }
     
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        // save the EventDispatcher's tag
-        outState.putString("ett", mEventDispatcherTag);
-    }
-    
-    @Override
     public void onDestroy() {
         super.onDestroy();
-        // save point is used to save the state in order to restore it later, after the configuration change.
-        this.mEventDispatcherTag = EventDispatcher.savePoint(this);
         // unregister the event dispatcher
         EventDispatcher.unregister(this);
     }
@@ -81,6 +64,41 @@ Usage
 ```
 
 The posting class can be different from the receiving one: both must be registered to the EventDispatcher, though! Remember that each Class that you want to use as an event MUST have the `@Event` annotation. You can choose between 5 type of events based on which is the use of the designed event: GENERIC, DATA, NETWORK, CONTEXT and UI. The difference is that UI events will be posted on the UI thread, meanwhile the others will be posted in a separated Thread.
+
+Handle configuration changes
+--------
+
+EventDispatcher allows you to handle configuration changes easily. By using `EventDispatcher.loadPoint()` and `EventDispatcher.savePoint()` you will be able to receive posted events even after a configuration change (i.e. rotation or other lifecycle events).
+
+```java
+    
+    private String mEventDispatcherTag;
+    
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        // retrieve the saved state, if present
+        if (savedInstanceState != null && savedInstanceState.containsKey("ett")) {
+            this.mEventDispatcherTag = savedInstanceState.getString("ett");
+        }
+        // loadPoint() is used to handle events' saved state between configuration changes 
+        EventDispatcher.loadPoint(this, this.mEventDispatcherTag);
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // save the EventDispatcher's tag
+        outState.putString("ett", mEventDispatcherTag);
+    }
+    
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // save point is used to save the state in order to restore it later, after the configuration change.
+        this.mEventDispatcherTag = EventDispatcher.savePoint(this);
+    }
+```
 
 Download
 --------
