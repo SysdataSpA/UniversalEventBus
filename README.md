@@ -10,14 +10,24 @@ The publisher is, in this case, called Bus or RxBus and deals with post events u
 
 The events that are posted by the Event dispatcher are heard by all those who sign up. To register, you must write down the method that the signing will take as an argument the type of object that the public EventDispatcher and will be annotated with the notation @Subscribe or @RxSubscribe
 
+![alt tag](http://sharing.sysdata.it/fvgmock/ues-diagram01.png)
+
 Usage
 --------
 
-1. You've got to initialize the EventDispatcher with your favorite process. We suggest to do it in the MainApplication's onCreate() and use RxEventProcessor. We also implemented standard EventProcessor which use Otto as Event Bus.
+1. You've got to initialize the EventDispatcher with your favorite process. 
+We suggest to do it in the MainApplication's onCreate() and use RxEventProcessor which use RxJava.
 
 ```java
   EventDispatcher.useEventProcessor(RxEventProcessor.newInstance());
 ```
+
+We also implemented an EventProcessor which use Otto as Event Bus.
+
+```java
+  EventDispatcher.useEventProcessor(EventProcessor.newInstance());
+```
+You can implement your own EventProcess if you want, you need to extends We will insert a guide in next days.
 
 2. Register the EventDispatcher when the Activity/Fragment/Service is created and unregister it when it is destroyed.
 
@@ -119,6 +129,11 @@ You can also depend on the .jar through Maven:
 or Gradle:
 ```groovy
 compile "com.baseandroid:baseandroid-rxeventdispatcher:0.0.14"
+// rxJava
+compile 'io.reactivex:rxandroid:1.2.1'
+// Because RxAndroid releases are few and far between, it is recommended you also
+// explicitly depend on RxJava's latest version for bug fixes and new features.
+compile 'io.reactivex:rxjava:1.2.6'
 ```
 
 Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap].
