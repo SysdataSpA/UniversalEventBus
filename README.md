@@ -1,11 +1,14 @@
 # Universal Event BUs
-An universal event bus by Sysdata
 =============================
 
-The EventDispatcher events is a bus designed to separate different parts of the application, while still allowing them to communicate efficiently.
+The Universal Event Bus is an event dispatcher architecture which help you to use most common event bus implementation as Otto in a structured mode.
+
+An events is a bus designed to separate different parts of the application, while still allowing them to communicate efficiently.
 The operation of the EventDispatcher is based on the publish-subscribe pattern: the bus asked a series of events that will be collected by those who joined them.
-The publisher is, in this case, called RxBus and deals with post events using the Observable of RxJava. The event dispatcher contains two RxBuses: one dedicated to the UI thread, and the other for all the other events that have nothing to do with the UI (network calls, CRUD operations with the database etc.).
-The events that are posted by the Event dispatcher are heard by all those who sign up. To register, you must write down the method that the signing will take as an argument the type of object that the public EventDispatcher and will be annotated with the notation @RxSubscribe
+
+The publisher is, in this case, called Bus or RxBus and deals with post events using the Observable of RxJava. The event dispatcher contains two RxBuses: one dedicated to the UI thread, and the other for all the other events that have nothing to do with the UI (network calls, CRUD operations with the database etc.).
+
+The events that are posted by the Event dispatcher are heard by all those who sign up. To register, you must write down the method that the signing will take as an argument the type of object that the public EventDispatcher and will be annotated with the notation @Subscribe or @RxSubscribe
 
 Usage
 --------
