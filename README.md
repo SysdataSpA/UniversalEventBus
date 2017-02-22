@@ -1,4 +1,4 @@
-# Universal Event BUs
+# Universal Event Bus
 =============================
 
 The Universal Event Bus is an event dispatcher architecture which help you to use most common event bus implementation as Otto in a structured mode.
@@ -13,7 +13,7 @@ The events that are posted by the Event dispatcher are heard by all those who si
 Usage
 --------
 
-1. You've got to initialize the EventDispatcher. We suggest to do it in the MainApplication's onCreate().
+1. You've got to initialize the EventDispatcher with your favorite process. We suggest to do it in the MainApplication's onCreate() and use RxEventProcessor. We also implemented standard EventProcessor which use Otto as Event Bus.
 
 ```java
   EventDispatcher.useEventProcessor(RxEventProcessor.newInstance());
@@ -128,7 +128,7 @@ Snapshots of the development version are available in [Sonatype's `snapshots` re
 License
 -------
 
-  Copyright (C) 2017 Sysdata Digital, S.r.l.
+  Copyright (C) 2017 Sysdata, S.p.a.
  
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
