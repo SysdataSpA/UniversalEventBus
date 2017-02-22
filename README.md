@@ -1,5 +1,5 @@
-# EventDispatcher
-EventDispatcher - An event bus by Sysdata
+# Universal Event BUs
+An universal event bus by Sysdata
 =============================
 
 The EventDispatcher events is a bus designed to separate different parts of the application, while still allowing them to communicate efficiently.
