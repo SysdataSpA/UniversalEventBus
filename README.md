@@ -15,20 +15,18 @@ The events that are posted by the Event dispatcher are heard by all those who si
 Usage
 --------
 
-1. You've got to initialize the EventDispatcher with your favorite process. 
+1) You've got to initialize the EventDispatcher with your favorite process. 
 We suggest to do it in the MainApplication's onCreate() and use RxEventProcessor which use RxJava.
 
 ```java
   EventDispatcher.useEventProcessor(RxEventProcessor.newInstance());
 ```
-
 We also implemented an EventProcessor which use Otto as Event Bus.
 
 ```java
   EventDispatcher.useEventProcessor(EventProcessor.newInstance());
 ```
-
-2. Register the EventDispatcher when the Activity/Fragment/Service is created and unregister it when it is destroyed.
+2) Register the EventDispatcher when the Activity/Fragment/Service is created and unregister it when it is destroyed.
 
 ```java
     
@@ -47,7 +45,7 @@ We also implemented an EventProcessor which use Otto as Event Bus.
         EventDispatcher.unregister(this);
     }
 ```
-3. Create events, post and receive them: Once the EventDispatcher is initialized and register in your Android component, you can post and receive events easily. Use `EventDispatcher.post()` to post the event you want to stream in the bus. Create a public method that has the same event type in its signature and annotate it with the `@RxSubscribe` signature in order to receive the Object that has been posted.
+3) Create events, post and receive them: Once the EventDispatcher is initialized and register in your Android component, you can post and receive events easily. Use `EventDispatcher.post()` to post the event you want to stream in the bus. Create a public method that has the same event type in its signature and annotate it with the `@RxSubscribe` signature in order to receive the Object that has been posted.
 
 ```java
     @Override
