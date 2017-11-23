@@ -138,25 +138,29 @@ public final class OttoEventProcessor implements EventProcessor {
          * This Observable (Observable.interval) cycles every EVENT_CONSUMPTION_INTERVAL millis
          * we observe results on a new Thread and remove items from non-UI queues
          */
-        rx.Observable.interval(EVENT_CONSUMPTION_INTERVAL, TimeUnit.MILLISECONDS).onBackpressureBuffer().subscribeOn(Schedulers.newThread()).observeOn(Schedulers.newThread()).subscribe(aLong1 -> {
-            if (!mNetworkEvents.isEmpty()) {
-                Object ev = mNetworkEvents.remove(0);
-                logEvent(ev, false);
-                BUS.post(ev);
-            } else if (!mDataEvents.isEmpty()) {
-                Object ev = mDataEvents.remove(0);
-                logEvent(ev, false);
-                BUS.post(ev);
-            } else if (!mGenericEvents.isEmpty()) {
-                Object ev = mGenericEvents.remove(0);
-                logEvent(ev, false);
-                BUS.post(ev);
-            } else if (!mContextEvents.isEmpty()) {
-                Object ev = mContextEvents.remove(0);
-                logEvent(ev, false);
-                BUS.post(ev);
-            }
-        });
+        rx.Observable.interval(EVENT_CONSUMPTION_INTERVAL, TimeUnit.MILLISECONDS)
+                .onBackpressureBuffer()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(Schedulers.newThread())
+                .subscribe(aLong1 -> {
+                    if (!mNetworkEvents.isEmpty()) {
+                        Object ev = mNetworkEvents.remove(0);
+                        logEvent(ev, false);
+                        BUS.post(ev);
+                    } else if (!mDataEvents.isEmpty()) {
+                        Object ev = mDataEvents.remove(0);
+                        logEvent(ev, false);
+                        BUS.post(ev);
+                    } else if (!mGenericEvents.isEmpty()) {
+                        Object ev = mGenericEvents.remove(0);
+                        logEvent(ev, false);
+                        BUS.post(ev);
+                    } else if (!mContextEvents.isEmpty()) {
+                        Object ev = mContextEvents.remove(0);
+                        logEvent(ev, false);
+                        BUS.post(ev);
+                    }
+                });
 
         /*
          * This Observable (Observable.interval) cycles every EVENT_CONSUMPTION_INTERVAL millis
@@ -232,12 +236,13 @@ public final class OttoEventProcessor implements EventProcessor {
             //init dead events manager
             if(mDeadEventManager == null) {
                 mDeadEventManager = new DeadEventManager();
-            }else{
+            } else {
                 BUS.unregister(mDeadEventManager);
                 UI_BUS.unregister(mDeadEventManager);
             }
             BUS.register(mDeadEventManager);
             UI_BUS.register(mDeadEventManager);
+
             //mark us as initialised
             mInitialised = true;
             startEventsConsumption();
@@ -270,6 +275,9 @@ public final class OttoEventProcessor implements EventProcessor {
                     Collections.sort(mContextEvents, Event.COMPARATOR);
                     break;
             }
+        } else if (o != null) {
+            DeadEvent deadEvent = new DeadEvent(BUS, o);
+            BUS.post(deadEvent);
         }
     }
 

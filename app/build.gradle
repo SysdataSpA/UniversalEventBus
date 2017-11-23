@@ -11,12 +11,19 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
     lintOptions {
         abortOnError false
     }
@@ -33,14 +40,15 @@ dependencies {
 
     // WITH THESE ONES YOU CAN TEST REMOTE LIBS
     // REMEMBER TO USE THESE AFTER TEST CAUSE JENKINS TROUBLES
-    compile "com.baseandroid:baseandroid-busadapter:$adapterVersionName"
-    compile "com.baseandroid:baseandroid-eventdispatcher:$adapterVersionName"
+//    compile "com.baseandroid:baseandroid-busadapter:$adapterVersionName"
+//    compile "com.baseandroid:baseandroid-eventdispatcher:$adapterVersionName"
     // compile "com.baseandroid:baseandroid-rxeventdispatcher:$adapterVersionName'
 
     // WITH THESE ONES YOU CAN USE LOCAL PROJECTS
     // REMEMBER: COMMENT THESE ONES BEFOR PUSH ON DEVELOP CAUSE JENKINS TROUBLES
-    //compile project(path: ':baseandroid-busadapter')
-    //compile project(path: ':baseandroid-eventdispatcher')
-    //compile project(path: ':baseandroid-rxeventdispatcher')
+    compile project(path: ':baseandroid-busadapter')
+    compile project(path: ':baseandroid-eventdispatcher')
+    compile project(path: ':baseandroid-rxeventdispatcher')
+    compile project(path: ':baseandroid-greenbus')
 
 }
