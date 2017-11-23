@@ -41,10 +41,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
-        targetCompatibility 1.7
-        sourceCompatibility 1.7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
+
     lintOptions {
         abortOnError false
     }

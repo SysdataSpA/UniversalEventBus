@@ -15,6 +15,6 @@
   -->
 
 <resources>
-    <string name="app_name">EventDispatcher</string>
+    <string name="app_name">UniversalEventBus</string>
     <string name="action_settings">Settings</string>
 </resources>
