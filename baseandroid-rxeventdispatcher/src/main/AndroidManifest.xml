@@ -1,10 +1,9 @@
-<manifest package="com.example.baseandroid_rxbus"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.baseandroid_rxbus">
 
-    <application android:allowBackup="true"
-                 android:label="@string/app_name"
-                 android:supportsRtl="true"
-    >
+    <application
+        android:label="@string/app_name"
+        android:supportsRtl="true">
 
     </application>
 

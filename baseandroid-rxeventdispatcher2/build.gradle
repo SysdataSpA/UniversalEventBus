@@ -1,0 +1,86 @@
+apply plugin: 'com.android.library'
+
+buildscript {
+    dependencies {
+        repositories {
+            mavenCentral()
+            maven { url 'https://dl.bintray.com/sysdata/maven' }
+            // serve per org.jfrog.buildinfo:build-info-extractor-gradle:3.1.1
+            maven { url "https://plugins.gradle.org/m2/" }
+            maven { url 'https://oss.jfrog.org/libs-snapshot' }
+        }
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+        classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:3.1.1'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
+        classpath 'com.github.dcendents:android-maven-plugin:1.2'
+    }
+}
+
+apply plugin: 'com.android.library'
+
+def libName = 'baseandroid-rxeventdispatcher2'
+
+android {
+    compileSdkVersion 28
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 28
+        versionCode libVersionCode
+        versionName libVersionName
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+    lintOptions {
+        abortOnError false
+    }
+
+}
+
+dependencies {
+    def adapterVersionName = project.ext.libVersionName
+
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.13'
+    // BusAdapter
+    // implementation project(path: ':baseandroid-busadapter')
+    implementation "com.baseandroid:baseandroid-busadapter:$adapterVersionName"
+    // rxJava
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    // Because RxAndroid releases are few and far between, it is recommended you also
+    // explicitly depend on RxJava's latest version for bug fixes and new features.
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.17'
+}
+
+// pubblicazione maven
+if (project.rootProject.file('local.properties').exists()) {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    ext {
+        // GROUP_ID
+        publishedGroupId = 'com.baseandroid'
+        // ARTIFACT_ID
+        artifact = libName
+        // VERSION_ID
+        libraryVersion = libVersionName
+
+        developerId = properties.getProperty("bintray.developer.id")
+        developerName = properties.getProperty("bintray.developer.name")
+        developerEmail = properties.getProperty("bintray.developer.email")
+
+        bintrayRepo = 'maven'
+        bintrayName = 'baseandroid-rxeventdispatcher2'
+        libraryName = 'baseandroid-rxeventdispatcher2'
+        bintrayOrganization = 'sysdata'
+    }
+
+    apply from: 'publishBintray.gradle'
+}

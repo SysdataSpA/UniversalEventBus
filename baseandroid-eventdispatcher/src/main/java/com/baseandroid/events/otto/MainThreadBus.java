@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Sysdata Digital, S.r.l.
+ * Copyright (C) 2020 Sysdata Digital, S.r.l.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,12 @@ public class MainThreadBus extends Bus {
         if (Looper.myLooper() == Looper.getMainLooper()) {
             super.post(event);
         } else {
-            mHandler.post(() -> MainThreadBus.super.post(event));
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    MainThreadBus.super.post(event);
+                }
+            });
         }
     }
 }

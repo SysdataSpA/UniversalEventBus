@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Sysdata Digital, S.r.l.
+ * Copyright (C) 2020 Sysdata Digital, S.r.l.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -138,25 +139,29 @@ public final class OttoEventProcessor implements EventProcessor {
          * This Observable (Observable.interval) cycles every EVENT_CONSUMPTION_INTERVAL millis
          * we observe results on a new Thread and remove items from non-UI queues
          */
-        rx.Observable.interval(EVENT_CONSUMPTION_INTERVAL, TimeUnit.MILLISECONDS).onBackpressureBuffer().subscribeOn(Schedulers.newThread()).observeOn(Schedulers.newThread()).subscribe(aLong1 -> {
-            if (!mNetworkEvents.isEmpty()) {
-                Object ev = mNetworkEvents.remove(0);
-                logEvent(ev, false);
-                BUS.post(ev);
-            } else if (!mDataEvents.isEmpty()) {
-                Object ev = mDataEvents.remove(0);
-                logEvent(ev, false);
-                BUS.post(ev);
-            } else if (!mGenericEvents.isEmpty()) {
-                Object ev = mGenericEvents.remove(0);
-                logEvent(ev, false);
-                BUS.post(ev);
-            } else if (!mContextEvents.isEmpty()) {
-                Object ev = mContextEvents.remove(0);
-                logEvent(ev, false);
-                BUS.post(ev);
-            }
-        });
+        rx.Observable.interval(EVENT_CONSUMPTION_INTERVAL, TimeUnit.MILLISECONDS).onBackpressureBuffer().subscribeOn(Schedulers.newThread()).observeOn(Schedulers.newThread()).subscribe(
+                new Action1<Long>() {
+                    @Override
+                    public void call(Long aLong1) {
+                        if (!mNetworkEvents.isEmpty()) {
+                            Object ev = mNetworkEvents.remove(0);
+                            logEvent(ev, false);
+                            BUS.post(ev);
+                        } else if (!mDataEvents.isEmpty()) {
+                            Object ev = mDataEvents.remove(0);
+                            logEvent(ev, false);
+                            BUS.post(ev);
+                        } else if (!mGenericEvents.isEmpty()) {
+                            Object ev = mGenericEvents.remove(0);
+                            logEvent(ev, false);
+                            BUS.post(ev);
+                        } else if (!mContextEvents.isEmpty()) {
+                            Object ev = mContextEvents.remove(0);
+                            logEvent(ev, false);
+                            BUS.post(ev);
+                        }
+                    }
+                });
 
         /*
          * This Observable (Observable.interval) cycles every EVENT_CONSUMPTION_INTERVAL millis
@@ -166,11 +171,14 @@ public final class OttoEventProcessor implements EventProcessor {
                 .onBackpressureBuffer()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())//UI Events must be posted on the Main Thread
-                .subscribe(aLong -> {
-                    if (!mUIEvents.isEmpty()) {
-                        Object ev = mUIEvents.remove(0);
-                        logEvent(ev, true);
-                        UI_BUS.post(ev);
+                .subscribe(new Action1<Long>() {
+                    @Override
+                    public void call(Long aLong) {
+                        if (!mUIEvents.isEmpty()) {
+                            Object ev = mUIEvents.remove(0);
+                            logEvent(ev, true);
+                            UI_BUS.post(ev);
+                        }
                     }
                 });
     }
