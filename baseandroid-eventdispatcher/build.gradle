@@ -55,8 +55,8 @@ dependencies {
     testImplementation 'junit:junit:4.13'
     //log
     implementation 'org.slf4j:slf4j-api:1.7.30'
-    implementation 'com.github.tony19:logback-android-core:1.1.1-4'
-    implementation 'com.github.tony19:logback-android-classic:1.1.1-4'
+    implementation 'com.github.tony19:logback-android-core:1.1.1-6'
+    implementation 'com.github.tony19:logback-android-classic:1.1.1-6'
     // otto
     implementation 'com.squareup:otto:1.3.8'
     // BusAdapter
