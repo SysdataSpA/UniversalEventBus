@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Sysdata Digital, S.r.l.
+ * Copyright (C) 2020 Sysdata Digital, S.r.l.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,8 +29,8 @@ import java.util.Random;
 import java.util.WeakHashMap;
 
 import rx.Observer;
-import rx.schedulers.Schedulers;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Class managing the events used throughout the application using {@link RxBus} classes.

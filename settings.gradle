@@ -1,1 +1,1 @@
-include ':app', ':baseandroid-busadapter', ':baseandroid-eventdispatcher', ':baseandroid-rxeventdispatcher'
+include ':app', ':baseandroid-busadapter', ':baseandroid-eventdispatcher', ':baseandroid-rxeventdispatcher', ':baseandroid-rxeventdispatcher2'
